@@ -27,44 +27,40 @@
 	 <div style="margin-top: 250px"> 
  
 	  <?php
-	;
+	// Removed empty statement ;
 	extract($_POST);
 
-include("DBconnection.php");
+	include("DBconnection.php");
 
-$sql=mysqli_query($conn,"SELECT * FROM patients where patientEmail='$email'");
-if(mysqli_num_rows($sql)>0)
-{
-    echo "<h1 align='center' class='alert-info'>This Email Id Already Exists</h1>"; 
-	echo "<button class='btn btn-danger btn-block' ><a style='color: white' href='register.php'>Back to Register</a></button>";
-	exit;
-}
-if(isset($_POST['submit'])) 
-{
-$name=$_POST['name'];
-$email=$_POST['email'];
-$password=$_POST['password'];
-$city=$_POST['city'];
-$nic=$_POST['nic'];
- 
-       
-	$sql = "INSERT INTO patients "."(name, patientEmail, password, city, nic)"."VALUE('$name','$email','$password','$city','$nic')";
-	
-	$results = mysqli_query($conn, $sql);
-	
-	if(!$results) {
-	  die('Could not enter data: '.mysqli_error($conn));
-	}
-	else
+	$result = mysqli_query($conn, "SELECT * FROM patients WHERE patientEmail='$email'");
+
+	if(mysqli_num_rows($result) > 0)
 	{
- 
-	header("Location:loginindex.php");
+		echo "<h1 align='center' class='alert-info'>This Email Id Already Exists</h1>";
+		echo "<button class='btn btn-danger btn-block'><a style='color: white' href='register.php'>Back to Register</a></button>";
+		exit;
 	}
-   }
- 
 
- 
+	if(isset($_POST['submit']))
+	{
+		$name = $_POST['name'];
+		$email = $_POST['email'];
+		$password = $_POST['password'];
+		$city = $_POST['city'];
+		$nic = $_POST['nic'];
 
+		$sql = "INSERT INTO patients (name, patientEmail, password, city, nic) VALUES ('$name', '$email', '$password', '$city', '$nic')";
+
+		$results = mysqli_query($conn, $sql);
+
+		if(!$results) {
+			die('Could not enter data: ' . mysqli_error($conn));
+		}
+		else
+		{
+			header("Location:loginindex.php");
+		}
+	}
 ?>
 	  
 	 </div>
