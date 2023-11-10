@@ -22,26 +22,26 @@
 	if(!isset($_SESSION['email']))
 	{
 		header("location:adminlogin.php");
+		exit;
 	}
 	else
 	{
 		$id = $_SESSION['id']; 
 		$email = $_SESSION['email'];
-		
+
 		$result = mysqli_query($conn,"SELECT * FROM admins WHERE id='" . $id."'");
 		$row  = mysqli_fetch_array($result);
-		
-		if($row >0)
-		{
-		$name=$row['name'];
-		$password =$row['password'];
-		 		}
-		
-	$mysqli = new mysqli('localhost','root','','covidv') or die(mysqli_error($mysqli));
-		 $resultSet = $mysqli->query("SELECT * FROM first_vaccine_requests ") or die ($mysqli->erorr);		
 
+		if(mysqli_num_rows($result) > 0)
+		{
+			$name = $row['name'];
+			$password = $row['password'];
+		}
+
+		$mysqli = new mysqli('localhost','root','','covidv') or die(mysqli_error($mysqli));
+		$resultSet = $mysqli->query("SELECT * FROM first_vaccine_requests ") or die ($mysqli->error);        
 	}
-	  ?>
+?>
 	
 	
 	
