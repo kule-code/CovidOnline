@@ -17,52 +17,50 @@
 <body>
 	
 <?php
-	session_start();
-	include "DBconnection.php";
-	if(!isset($_SESSION['email']))
-	{
-		header("location:loginindex.php");
-	}
-	else
-	{
-		$id = $_SESSION['id']; 
-		$email = $_SESSION['email'];
+session_start();
+include "DBconnection.php";
 
-		$result = mysqli_query($conn,"SELECT * FROM patients WHERE id='" . $id."'");
-		$row  = mysqli_fetch_array($result);
-		
-		if($row >0)
-		{
-		$name=$row['name'];
-		$password =$row['password'];
-		$city =$row['city'];		 
-		$vaccinename =$row['vaccinename'];
-		$email =$row['patientEmail'];
-		$nic =$row['nic'];	
-		 }
-		$result = mysqli_query($conn,"SELECT * FROM first_vaccine_requests WHERE patientID='" . $id."'");
-		$row  = mysqli_fetch_array($result);
-		
-		
-		if($row >0)
-		{
-		$FL = $row['FvaccineLocation'];
-		$FD = $row['FvaccineTime'];
-		$status1 = $row['status'];	
-		 }
-		$result = mysqli_query($conn,"SELECT * FROM second_vaccine_requests WHERE patientID='" . $id."'");
-		$row  = mysqli_fetch_array($result);
-		
-		
-		
-		if($row >0)
-		{
-		$SD = $row['SvaccineTime'];
-		$SL = $row['SvaccineLocation'];
-		$status2 = $row['status'];
-	}
-	}
-	  ?>
+if (!isset($_SESSION['email'])) {
+    header("location:loginindex.php");
+    exit(); // Added an exit after redirecting to prevent further execution
+}
+
+$id = $_SESSION['id'];
+
+// Fetch patient details from 'patients' table
+$patientResult = mysqli_query($conn, "SELECT * FROM patients WHERE id = '$id'");
+$patientRow = mysqli_fetch_array($patientResult);
+
+if ($patientRow) {
+    $name = $patientRow['name'];
+    $password = $patientRow['password'];
+    $city = $patientRow['city'];
+    $vaccinename = $patientRow['vaccinename'];
+    $patientEmail = $patientRow['patientEmail']; // Renamed to avoid variable conflict
+    $nic = $patientRow['nic'];
+}
+
+// Fetch first vaccine request details from 'first_vaccine_requests' table
+$firstVaccineResult = mysqli_query($conn, "SELECT * FROM first_vaccine_requests WHERE patientID = '$id'");
+$firstVaccineRow = mysqli_fetch_array($firstVaccineResult);
+
+if ($firstVaccineRow) {
+    $FL = $firstVaccineRow['FvaccineLocation'];
+    $FD = $firstVaccineRow['FvaccineTime'];
+    $status1 = $firstVaccineRow['status'];
+}
+
+// Fetch second vaccine request details from 'second_vaccine_requests' table
+$secondVaccineResult = mysqli_query($conn, "SELECT * FROM second_vaccine_requests WHERE patientID = '$id'");
+$secondVaccineRow = mysqli_fetch_array($secondVaccineResult);
+
+if ($secondVaccineRow) {
+    $SD = $secondVaccineRow['SvaccineTime'];
+    $SL = $secondVaccineRow['SvaccineLocation'];
+    $status2 = $secondVaccineRow['status'];
+}
+?>
+
 <div class="printable">	
 <div class="topnav" style=" margin-top: -20px  " >
 <a style="padding-top:0px; padding-bottom: 0px"><img height="60px" src="228-2285847_emblem-of-sri-lanka-national-emblem-of-sri.png"></a>
