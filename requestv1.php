@@ -17,31 +17,32 @@
 <body>
 	
 <?php
-	session_start();
-	include "DBconnection.php";
-	if(!isset($_SESSION['email']))
-	{
-		header("location:adminlogin.php");
-	}
-	else
-	{
-		$id = $_SESSION['id']; 
-		$email = $_SESSION['email'];
-		
-		$result = mysqli_query($conn,"SELECT * FROM admins WHERE id='" . $id."'");
-		$row  = mysqli_fetch_array($result);
-		
-		if($row >0)
-		{
-		$name=$row['name'];
-		$password =$row['password'];
-		 		}
-		
-	$mysqli = new mysqli('localhost','root','','covidv') or die(mysqli_error($mysqli));
-		 $resultSet = $mysqli->query("SELECT * FROM first_vaccine_requests ") or die ($mysqli->erorr);		
+session_start();
+include "DBconnection.php";
 
-	}
-	  ?>
+if (!isset($_SESSION['email'])) {
+    header("location:adminlogin.php");
+    exit(); // Added an exit after redirecting to prevent further execution
+}
+
+$id = $_SESSION['id'];
+
+// Fetch admin details from 'admins' table
+$result = mysqli_query($conn, "SELECT * FROM admins WHERE id='$id'");
+$row = mysqli_fetch_array($result);
+
+if ($row) {
+    $name = $row['name'];
+    $password = $row['password'];
+}
+
+// Using a new MySQLi connection for querying first_vaccine_requests table
+$mysqli = new mysqli('localhost', 'root', '', 'covidv') or die(mysqli_error($mysqli));
+
+// Perform query on first_vaccine_requests table using the new connection
+$resultSet = $mysqli->query("SELECT * FROM first_vaccine_requests") or die($mysqli->error);
+?>
+
 	
 	
 	
